@@ -1,7 +1,3 @@
-// Tab Suspender Popup
-document.addEventListener("DOMContentLoaded",()=>{
-  chrome.storage.local.get(["pro"],d=>{
-    const b=document.getElementById("upgrade-btn");
-    if(d.pro){b.textContent="Pro \u2713";b.disabled=true;b.style.background="#30363d";}
-  });
-});
+function refresh(){chrome.tabs.query({},tabs=>{document.getElementById('tab-list').innerHTML=tabs.filter(t=>!t.pinned).slice(0,15).map(t=>'<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px;"><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+t.title+'">'+t.title+'</span><button onclick="sus('+t.id+')" style="padding:1px 6px;font-size:10px;background:var(--surface);color:var(--accent);border:1px solid var(--border);border-radius:3px;cursor:pointer;">Suspend</button></div>').join('')||'<div style="color:var(--text-secondary);padding:12px;">No tabs to suspend</div>'})}
+function sus(id){chrome.tabs.discard(id);setTimeout(refresh,500)}
+document.addEventListener('DOMContentLoaded',refresh)
